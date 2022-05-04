@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Newrelic Dashboard Slack Exporter"
+Parameters:
+  NEWRELICGUID:
+    Description: Newrelic Dashboard Guid
+    Type: String
+    NoEcho: true
+  NEWRELICAPIKEY:
+    Description: Newrelic API Key
+    Type: String
+    NoEcho: true
+  SLACKPATH:
+    Description: Slack Webhook Path
+    Type: String
+    NoEcho: true
+  SLACKSUBJECT:
+    Description: Slack Message Subject
+    Type: String
+    Default: NewRelic Dashboard Snapshot
+  SCHEDULE:
+    Description: Cron or Rate Expressions. see https://docs.aws.amazon.com/systems-manager/latest/userguide/reference-cron-and-rate-expressions.html
+    Type: String
+    Default: cron(0 0 * * ? *)
+Resources:
+  ScheduledRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: ScheduledRule
+      ScheduleExpression: !Ref "SCHEDULE"
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt "LambdaFunction.Arn"
+          Id: TargetFunctionV1
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref "LambdaFunction"
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt "ScheduledRule.Arn"
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: !Sub |
+          #LambdaCode
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 60
+      Environment:
+        Variables:
+          "NEWRELIC_GUID": !Ref "NEWRELICGUID"
+          "NEWRELIC_APIKEY": !Ref "NEWRELICAPIKEY"
+          "SLACK_PATH": !Ref "SLACKPATH"
+          "SLACK_SUBJECT": !Ref "SLACKSUBJECT"

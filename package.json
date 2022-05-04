@@ -1,0 +1,22 @@
+{
+  "name": "blog-2022.05.02-newrelic-dashboard-slack-exporter",
+  "version": "1.0.0",
+  "description": "This generate aws resources that notify newrelic dashboard snapshot to slack.",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seiichi1101/newrelic-dashboard-slack-exporter.git"
+  },
+  "author": "seiichi1101",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seiichi1101/newrelic-dashboard-slack-exporter/issues"
+  },
+  "homepage": "https://github.com/seiichi1101/newrelic-dashboard-slack-exporter#readme"
+}
