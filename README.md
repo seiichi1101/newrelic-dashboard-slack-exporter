@@ -4,11 +4,15 @@ This generate aws resources that notify newrelic dashboard snapshot to slack.
 
 <a href="https://ap-northeast-1.console.aws.amazon.com/cloudformation/home?region=ap-northeast-1#/stacks/create/review?templateURL=https://newrelic-dashboard-slack-exporter-bucket.s3.ap-northeast-1.amazonaws.com/template.yaml&stackName=newrelic-dashboard-slack-exporter-stack" target="_blank">Cloud Formation Deploy</a>
 
+## Architecture
+
+![](img/newrelic-dashboard-slack-exporter-architecture.png)
+
 ## Pre-Requisite
 
 - Node = 14.x
 
-## setup envs
+## Setup envs
 
 - copy example env
 
