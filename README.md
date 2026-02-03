@@ -8,10 +8,6 @@ This generate aws resources that notify newrelic dashboard snapshot to slack.
 
 ![](img/newrelic-dashboard-slack-exporter-architecture.png)
 
-## Pre-Requisite
-
-- Node = 18.x
-
 ## Setup envs
 
 - copy example env
